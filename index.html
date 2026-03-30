@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ray Arch Academy | NATA Coaching</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #f4efe6;
+            --accent-gold: #c2a85a;
+            --accent-blue: #8fb9c9;
+            --accent-purple: #a38fbf;
+            --accent-terra: #c47a5a;
+            --border-light: rgba(244, 239, 230, 0.1);
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'DM Sans', sans-serif;
+            
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-gold);
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(194, 168, 90, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .text-italic {
+            font-style: italic;
+            color: var(--accent-gold);
+        }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background-image: 
+                linear-gradient(var(--border-light) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+            background-size: 80px 80px;
+            background-position: center center;
+        }
+        
+        /* Fade grid at edges */
+        #hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, transparent 20%, var(--bg-color) 80%);
+            pointer-events: none;
+        }
+
+        #hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: 1.5rem;
+            z-index: 2;
+        }
+
+        .cta-btn {
+            padding: 1rem 2.5rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--bg-color);
+            background-color: var(--text-color);
+            border: none;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 2;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-gold);
+            transition: var(--transition-smooth);
+            z-index: -1;
+        }
+        .cta-btn:hover {
+            color: var(--bg-color);
+        }
+        .cta-btn:hover::before {
+            top: 0;
+        }
+
+        /* Section Layouts */
+        section {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+        }
+
+        /* Interactive Canvas Section */
+        #interactive {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .canvas-container {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            border: 1px solid var(--border-light);
+            margin-top: 2rem;
+            position: relative;
+            background-color: rgba(0,0,0,0.2);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .canvas-overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-heading);
+            font-style: italic;
+            color: rgba(244, 239, 230, 0.3);
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        /* What You Learn Section */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            padding: 3rem 2rem;
+            border: 1px solid var(--border-light);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+        }
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--text-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.02);
+        }
+        .card:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .card:nth-child(1):hover::after { background: var(--accent-gold); }
+        .card:nth-child(2):hover::after { background: var(--accent-blue); }
+        .card:nth-child(3):hover::after { background: var(--accent-purple); }
+        .card:nth-child(4):hover::after { background: var(--accent-terra); }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--border-light);
+            transition: var(--transition-smooth);
+        }
+        .card:hover .card-icon {
+            color: var(--text-color);
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .card p {
+            color: rgba(244, 239, 230, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Transformation Section */
+        .transform-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+        .visual-box {
+            width: 300px;
+            height: 300px;
+            border: 1px solid var(--border-light);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+        }
+        
+        /* Chaos Box */
+        .chaos-elements span {
+            position: absolute;
+            background: var(--border-light);
+            transition: var(--transition-smooth);
+        }
+        .chaos-elements span:nth-child(1) { width: 100px; height: 2px; top: 30%; left: 10%; transform: rotate(45deg); }
+        .chaos-elements span:nth-child(2) { width: 2px; height: 120px; top: 20%; right: 30%; transform: rotate(-15deg); }
+        .chaos-elements span:nth-child(3) { width: 60px; height: 60px; border: 1px solid var(--border-light); bottom: 20%; left: 40%; transform: rotate(33deg); background: transparent; }
+
+        /* Order Box */
+        .order-elements {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            width: 60%;
+            height: 60%;
+            opacity: 0.2;
+            transition: var(--transition-smooth);
+        }
+        .order-elements span {
+            border: 1px solid var(--text-color);
+        }
+
+        .transform-wrapper:hover .chaos-elements span:nth-child(1) { top: 50%; left: 50%; width: 0; }
+        .transform-wrapper:hover .chaos-elements span:nth-child(2) { height: 0; }
+        .transform-wrapper:hover .chaos-elements span:nth-child(3) { opacity: 0; }
+        
+        .transform-wrapper:hover .order-elements {
+            opacity: 1;
+            width: 80%;
+            height: 80%;
+        }
+        .transform-wrapper:hover .order-elements span {
+            border-color: var(--accent-gold);
+        }
+        
+        .transform-wrapper {
+            cursor: pointer;
+        }
+        .transform-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            font-family: var(--font-heading);
+            font-style: italic;
+            color: rgba(244, 239, 230, 0.5);
+        }
+        .transform-wrapper:hover .lbl-after {
+            color: var(--accent-gold);
+        }
+
+        /* Trust Section */
+        #trust {
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            padding: 4rem;
+            text-align: center;
+        }
+        .trust-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-blue);
+        }
+        .trust-item p {
+            font-size: 0.9rem;
+            color: rgba(244, 239, 230, 0.6);
+        }
+
+        /* Final CTA */
+        #cta {
+            text-align: center;
+            padding: 10rem 4rem;
+        }
+        #cta h2 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 3rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-light);
+            font-size: 0.85rem;
+            color: rgba(244, 239, 230, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { padding: 1.5rem 2rem; }
+            section { padding: 5rem 2rem; }
+            .transform-container { flex-direction: column; }
+            #trust { flex-direction: column; gap: 3rem; }
+        }
+
+        /* Disable custom cursor on touch devices */
+        @media (pointer: coarse) {
+            * { cursor: auto !important; }
+            .cursor-dot, .cursor-outline { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot" data-cursor></div>
+    <div class="cursor-outline" data-cursor></div>
+
+    <nav>
+        <div class="logo">Ray Arch.</div>
+        <div>Menu</div>
+    </nav>
+
+    <section id="hero">
+        <h1 class="reveal">Think Like an <br><span class="text-italic">Architect.</span></h1>
+        <button class="cta-btn reveal" style="transition-delay: 0.2s;">Start Training</button>
+    </section>
+
+    <section id="interactive">
+        <div class="section-header reveal">
+            <h2>The First Draft</h2>
+            <p style="color: rgba(244,239,230,0.6); margin-top: 1rem;">Click and drag to sketch your vision. Everything starts with a single line.</p>
+        </div>
+        <div class="canvas-container reveal" id="canvas-container">
+            <span class="canvas-overlay-text" id="canvas-hint">Draw here</span>
+            <canvas id="sketchpad"></canvas>
+        </div>
+    </section>
+
+    <section id="learn">
+        <div class="section-header reveal">
+            <h2>Master the <span class="text-italic">Fundamentals</span></h2>
+        </div>
+        <div class="grid-cards">
+            <div class="card reveal" style="transition-delay: 0.1s;">
+                <div class="card-icon">✎</div>
+                <h3>Drawing</h3>
+                <p>Learn perspective, proportion, and shading. Transform raw ideas into precise structural sketches.</p>
+            </div>
+            <div class="card reveal" style="transition-delay: 0.2s;">
+                <div class="card-icon">◱</div>
+                <h3>Aptitude</h3>
+                <p>Sharpen your logical reasoning and spatial visualization required for competitive architecture exams.</p>
+            </div>
+            <div class="card reveal" style="transition-delay: 0.3s;">
+                <div class="card-icon">◎</div>
+                <h3>Observation</h3>
+                <p>Train your eye to see details, light, shadows, and the hidden geometry of the world around you.</p>
+            </div>
+            <div class="card reveal" style="transition-delay: 0.4s;">
+                <div class="card-icon">⬡</div>
+                <h3>Design Thinking</h3>
+                <p>Move beyond mere aesthetics. Learn to solve spatial problems with intent and functionality.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="transformation">
+        <div class="section-header reveal text-center" style="text-align: center;">
+            <h2>Clarity from <span class="text-italic">Chaos</span></h2>
+            <p style="color: rgba(244,239,230,0.6); margin-top: 1rem;">Hover over the structure below.</p>
+        </div>
+        
+        <div class="transform-container reveal">
+            <div class="transform-wrapper">
+                <div class="visual-box">
+                    <div class="chaos-elements">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="order-elements">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="transform-labels">
+                    <span class="lbl-before">Confused</span>
+                    <span class="lbl-after" style="transition: all 0.3s;">Structured</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="trust" class="reveal">
+        <div class="trust-item">
+            <h3>NATA Focused</h3>
+            <p>Curriculum designed strictly for NATA standards.</p>
+        </div>
+        <div class="trust-item">
+            <h3>Timed Practice</h3>
+            <p>Simulated exams to master time management.</p>
+        </div>
+        <div class="trust-item">
+            <h3>Personal Guidance</h3>
+            <p>Direct feedback loops from expert architects.</p>
+        </div>
+    </section>
+
+    <section id="cta">
+        <h2 class="reveal">You don’t need talent.<br>You need <span class="text-italic" style="color: var(--accent-terra);">direction.</span></h2>
+        <button class="cta-btn reveal" style="transition-delay: 0.2s; background-color: var(--accent-terra); color: #fff;">Join Ray Arch Academy</button>
+    </section>
+
+    <footer>
+        <div>© 2026 Ray Arch Academy. All rights reserved.</div>
+        <div>Designed for Architects.</div>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Adding slight delay to outline for smooth follow effect
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Add hover effects for cursor on interactive elements
+        const interactables = document.querySelectorAll('button, .card, .transform-wrapper');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.backgroundColor = 'rgba(244, 239, 230, 0.1)';
+                cursorOutline.style.borderColor = 'transparent';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.backgroundColor = 'transparent';
+                cursorOutline.style.borderColor = 'rgba(194, 168, 90, 0.5)';
+            });
+        });
+
+        // Scroll Reveal Animations
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Canvas Drawing Logic
+        const canvas = document.getElementById('sketchpad');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        const hint = document.getElementById('canvas-hint');
+        
+        let isDrawing = false;
+
+        // Setup canvas size
+        function resizeCanvas() {
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#c2a85a'; // Gold accent
+            ctx.lineWidth = 2;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            hint.style.opacity = '0'; // Hide hint text
+            const pos = getMousePos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getMousePos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.closePath();
+        }
+
+        // Mouse Events
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch Events for mobile drawing
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }, {passive: false});
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }, {passive: false});
+
+        canvas.addEventListener('touchend', (e) => {
+            const mouseEvent = new MouseEvent('mouseup', {});
+            canvas.dispatchEvent(mouseEvent);
+        });
+    </script>
+</body>
+</html>
